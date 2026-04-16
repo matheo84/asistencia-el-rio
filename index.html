@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistencia – Congregación El Río</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul-profundo: #0a2540;
+    --azul-rio:      #1a5f8a;
+    --azul-claro:    #2e8bc0;
+    --cielo:         #b8d9f0;
+    --arena:         #f4efe6;
+    --blanco:        #ffffff;
+    --texto:         #0d1b2a;
+    --gris:          #607080;
+    --verde:         #1a7a5e;
+    --verde-claro:   #d4f0e8;
+    --oro:           #c8922a;
+    --borde:         #dde6ef;
+    --sombra:        rgba(10,37,64,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--azul-profundo);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 80px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Fondo con textura de agua */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(26,95,138,0.4) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 80% 20%, rgba(46,139,192,0.2) 0%, transparent 70%),
+      linear-gradient(180deg, #0a2540 0%, #0d3055 60%, #0a2540 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ondas SVG en el fondo */
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 200px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 200'%3E%3Cpath d='M0,100 C240,160 480,40 720,100 C960,160 1200,40 1440,100 L1440,200 L0,200 Z' fill='rgba(46,139,192,0.06)'/%3E%3Cpath d='M0,130 C360,80 720,170 1080,130 C1260,110 1380,150 1440,140 L1440,200 L0,200 Z' fill='rgba(26,95,138,0.08)'/%3E%3C/svg%3E") no-repeat bottom;
+    background-size: cover;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .contenido {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* ── Header ── */
+  header {
+    text-align: center;
+    color: var(--blanco);
+    margin-bottom: 32px;
+    animation: bajarSuave 0.7s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  .logo-marca {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .logo-icono {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--azul-claro), var(--azul-rio));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(46,139,192,0.4);
+  }
+
+  .logo-icono svg { width: 24px; height: 24px; fill: white; }
+
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    line-height: 1.15;
+    color: var(--blanco);
+  }
+
+  header p {
+    font-size: 0.82rem;
+    opacity: 0.55;
+    margin-top: 6px;
+    font-weight: 300;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* ── Card principal ── */
+  .card {
+    background: var(--blanco);
+    border-radius: 24px;
+    padding: 28px 20px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.15);
+    animation: subirSuave 0.7s cubic-bezier(.22,1,.36,1) 0.1s both;
+    box-sizing: border-box;
+  }
+
+  .seccion-titulo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--azul-rio);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 8px;
+    margin-bottom: 18px;
+    margin-top: 24px;
+  }
+  .seccion-titulo:first-child { margin-top: 0; }
+
+  .campo { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--gris);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  input[type="date"], input[type="number"], select, textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--borde);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--texto);
+    background: #f8fafc;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    outline: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--azul-claro);
+    box-shadow: 0 0 0 3px rgba(46,139,192,0.12);
+    background: #fff;
+  }
+
+  /* ── Contadores ── */
+  .contadores {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+    width: 100%;
+  }
+
+  .contador-box {
+    background: linear-gradient(145deg, #f0f7ff, #e4f0fa);
+    border: 1.5px solid #c8dff0;
+    border-radius: 16px;
+    padding: 16px 8px 12px;
+    text-align: center;
+    transition: box-shadow 0.2s;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .contador-box:hover { box-shadow: 0 4px 20px rgba(26,95,138,0.12); }
+
+  .contador-box.zoom-box {
+    background: linear-gradient(145deg, #edfaf4, #d6f5e8);
+    border-color: #a8e0c8;
+  }
+
+  .contador-box label {
+    font-size: 0.65rem;
+    color: var(--azul-rio);
+    letter-spacing: 1.2px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .zoom-box label { color: var(--verde); }
+
+  .ctrl {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  .btn-ctrl {
+    width: 38px; height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: none;
+    background: var(--azul-rio);
+    color: #fff;
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+    font-weight: 300;
+    box-shadow: 0 2px 8px rgba(26,95,138,0.3);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .zoom-box .btn-ctrl { background: var(--verde); box-shadow: 0 2px 8px rgba(26,122,94,0.3); }
+  .btn-ctrl:active { transform: scale(0.9); }
+
+  .num-display {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--texto);
+    min-width: 0;
+    flex: 1;
+    text-align: center;
+    line-height: 1;
+  }
+
+  input[type="number"].input-contador {
+    margin-top: 0;
+    text-align: center;
+    font-size: 0.82rem;
+    padding: 6px 4px;
+    background: rgba(255,255,255,0.6);
+    border-color: rgba(26,95,138,0.2);
+    width: 100%;
+  }
+
+  /* ── Total Banner ── */
+  .total-banner {
+    background: linear-gradient(90deg, var(--azul-profundo) 0%, var(--azul-rio) 100%);
+    border-radius: 14px;
+    padding: 16px 22px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(10,37,64,0.25);
+  }
+  .total-banner-label {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    opacity: 0.7;
+  }
+  .total-banner-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 72px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  /* ── Preview del mensaje ── */
+  .preview-box {
+    background: #f8fffe;
+    border: 1.5px solid #a8e0c8;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: var(--texto);
+    line-height: 1.6;
+    min-height: 70px;
+    display: none;
+  }
+  .preview-box.visible { display: block; }
+  .preview-fecha {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-bottom: 10px;
+    color: var(--azul-profundo);
+  }
+  .preview-saludo {
+    font-size: 0.84rem;
+    color: var(--gris);
+    margin-bottom: 12px;
+    line-height: 1.4;
+  }
+  .preview-cuerpo {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .preview-fila {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 14px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f0f4f8;
+  }
+  .preview-fila:last-child { border-bottom: none; }
+  .preview-fila.total {
+    background: #f0f7ff;
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .preview-etiqueta { color: var(--gris); }
+  .preview-fila.total .preview-etiqueta { color: var(--azul-rio); }
+  .preview-valor {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--texto);
+  }
+  .preview-fila.total .preview-valor { color: var(--azul-rio); font-size: 1.2rem; }
+  .preview-sep {
+    height: 1px;
+    background: var(--borde);
+    margin: 0 14px;
+  }
+  .preview-nota {
+    font-size: 0.8rem;
+    color: var(--gris);
+    font-style: italic;
+    margin-bottom: 10px;
+    padding: 0 2px;
+  }
+  .preview-pie {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--gris);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Botones ── */
+  .btn-group { display: flex; flex-direction: column; gap: 10px; }
+
+  .btn {
+    padding: 14px 20px;
+    border-radius: 12px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    letter-spacing: 0.2px;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+  .btn:active { transform: translateY(0); }
+
+  .btn-whatsapp { background: #25d366; color: #fff; }
+  .btn-guardar  { background: var(--azul-rio); color: #fff; }
+  .btn-sheets   { background: #1e7145; color: #fff; }
+  .btn-copiar   { background: #f1f5f9; color: var(--texto); border: 1.5px solid #dde6ef; }
+  .btn-secundario {
+    background: var(--arena);
+    color: var(--azul-rio);
+    border: 1.5px solid var(--borde);
+    font-size: 0.86rem;
+  }
+  .btn-estadisticas {
+    background: linear-gradient(90deg, #4a2c8a, #7c3aed);
+    color: #fff;
+  }
+
+  /* Estado del botón Sheets */
+  .btn-sheets.guardando { background: #2d6a4f; cursor: not-allowed; }
+  .btn-sheets.ok        { background: #1b5e3b; }
+  .btn-sheets.error     { background: #c0392b; }
+
+  /* ── Config panel ── */
+  .config-panel {
+    background: #fffdf5;
+    border: 1.5px solid #fde8a0;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-top: 20px;
+    display: none;
+  }
+  .config-panel.visible { display: block; }
+  .config-titulo {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #92610a;
+    margin-bottom: 12px;
+  }
+  .config-nota {
+    font-size: 0.79rem;
+    color: #705210;
+    line-height: 1.55;
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: #fef3c7;
+    border-radius: 8px;
+  }
+  .config-nota a { color: #92610a; font-weight: 600; }
+  .config-nota code {
+    background: rgba(0,0,0,0.08);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 0.78rem;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 32px; left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
+    z-index: 999;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.ok    { background: #1a7a5e; color: #fff; }
+  .toast.info  { background: #1e293b; color: #fff; }
+  .toast.warn  { background: #c0392b; color: #fff; }
+
+  /* ── Panel historial ── */
+  .panel-externo {
+    width: 100%;
+    margin-top: 24px;
+    display: none;
+    animation: subirSuave 0.4s ease both;
+  }
+  .panel-externo.visible { display: block; }
+
+  .panel-header {
+    font-family: 'Cormorant Garamond', serif;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-header button {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #fff;
+    border-radius: 8px;
+    padding: 5px 14px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .panel-header button:hover { background: rgba(255,255,255,0.22); }
+
+  .hist-item {
+    background: rgba(255,255,255,0.09);
+    backdrop-filter: blur(8px);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+  .hist-fecha { font-size: 0.76rem; opacity: 0.6; margin-bottom: 5px; }
+  .hist-datos { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hist-chip {
+    background: rgba(255,255,255,0.13);
+    border-radius: 20px;
+    padding: 2px 12px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .hist-chip.total { background: rgba(200,146,42,0.3); border-color: rgba(200,146,42,0.4); }
+  .hist-chip.presencial { background: rgba(46,139,192,0.2); }
+  .hist-chip.zoom       { background: rgba(26,122,94,0.2); }
+  .hist-estado { font-size: 0.72rem; margin-top: 6px; opacity: 0.6; }
+  .hist-estado.synced   { color: #6ee7b7; opacity: 1; }
+  .hist-estado.local    { color: #fcd34d; opacity: 1; }
+
+  .hist-actions { display: flex; gap: 6px; margin-top: 10px; }
+  .hist-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+  }
+  .hist-btn:hover { background: rgba(255,255,255,0.2); }
+  .hist-btn.sheets { background: rgba(30,113,69,0.4); border-color: rgba(30,113,69,0.5); }
+
+  /* ── Estadísticas ── */
+  .stat-card {
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    color: #fff;
+  }
+  .stat-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 14px;
+    opacity: 0.9;
+    letter-spacing: 0.3px;
+  }
+
+  .kpis {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .kpi {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+  .kpi .kpi-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .kpi .kpi-lbl {
+    font-size: 0.68rem;
+    opacity: 0.65;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+
+  .barra-wrap { margin-bottom: 10px; }
+  .barra-label { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 4px; opacity: 0.88; }
+  .barra-track { height: 22px; background: rgba(255,255,255,0.09); border-radius: 30px; overflow: hidden; }
+  .barra-fill  {
+    height: 100%;
+    border-radius: 30px;
+    display: flex; align-items: center; padding-left: 10px;
+    font-size: 0.73rem; font-weight: 700; color: #fff;
+    transition: width 0.85s cubic-bezier(.22,1,.36,1);
+    min-width: 30px;
+  }
+
+  .ranking-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .ranking-item:last-child { border-bottom: none; }
+  .ranking-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .rank-1 { background: var(--oro); color: #1a2030; }
+  .rank-2 { background: #94a3b8; color: #1a2030; }
+  .rank-3 { background: #cd7c3e; color: #fff; }
+  .rank-other { background: rgba(255,255,255,0.13); }
+  .ranking-info { flex: 1; }
+  .ranking-fecha { font-size: 0.8rem; font-weight: 600; }
+  .ranking-detalle { font-size: 0.7rem; opacity: 0.6; margin-top: 1px; }
+  .ranking-total { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: #fde68a; }
+
+  @keyframes bajarSuave {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes subirSuave {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Spinner inline */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Separador config */
+  .sep { height: 1px; background: var(--borde); margin: 20px 0; }
+</style>
+</head>
+<body>
+
+<div class="contenido">
+
+  <header>
+    <h1>Congregación El Río<br>Panajachel</h1>
+    <p>Registro de Asistencia</p>
+  </header>
+
+  <!-- ── Card principal ── -->
+  <div class="card">
+
+    <p class="seccion-titulo">Informacion de la Reunion</p>
+
+    <div class="campo">
+      <label>Fecha</label>
+      <input type="date" id="fecha">
+    </div>
+
+    <p class="seccion-titulo">Asistencia</p>
+
+    <div class="contadores">
+      <div class="contador-box">
+        <label>Presencial</label>
+        <div class="ctrl">
+          <button class="btn-ctrl" onclick="cambiar('presencial', -1)">−</button>
+          <div class="num-display" id="numPresencial">0</div>
+          <button class="btn-ctrl" onclick="cambiar('presencial', 1)">+</button>
+        </div>
+        <input type="number" class="input-contador" id="inPresencial" min="0" value="0"
+          oninput="sincronizar('presencial')" placeholder="o escribe">
+      </div>
+      <div class="contador-box zoom-box">
+        <label>Zoom</label>
+        <div class="ctrl">
+          <button class="btn-ctrl" onclick="cambiar('zoom', -1)">−</button>
+          <div class="num-display" id="numZoom">0</div>
+          <button class="btn-ctrl" onclick="cambiar('zoom', 1)">+</button>
+        </div>
+        <input type="number" class="input-contador" id="inZoom" min="0" value="0"
+          oninput="sincronizar('zoom')" placeholder="o escribe">
+      </div>
+    </div>
+
+    <div class="total-banner">
+      <div class="total-banner-label">Total de Asistentes</div>
+      <div class="total-banner-num" id="totalDisplay">0</div>
+    </div>
+
+    <div class="campo">
+      <label>Observaciones (opcional)</label>
+      <textarea id="notas" placeholder="Ej: Se recibieron nuevos miembros, tema especial, etc."></textarea>
+    </div>
+
+    <!-- Preview del mensaje -->
+    <div class="preview-box" id="previewBox"></div>
+
+    <!-- Botones principales -->
+    <div class="btn-group">
+
+      <button class="btn btn-whatsapp" onclick="enviarWhatsApp()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Enviar a WhatsApp
+      </button>
+
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-secundario" style="flex:1;" onclick="toggleHistorial()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          Historial
+        </button>
+        <button class="btn btn-estadisticas" style="flex:1;" onclick="toggleEstadisticas()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Estadisticas
+        </button>
+      </div>
+    </div>
+
+    <!-- Google Sheets configurado automáticamente -->
+
+  </div><!-- .card -->
+
+  <!-- ── Historial ── -->
+  <div class="panel-externo" id="historialPanel">
+    <div class="panel-header">
+      <span>Historial de Asistencia</span>
+      <button onclick="exportarCSV()">Exportar CSV</button>
+    </div>
+    <div id="historialLista"></div>
+  </div>
+
+  <!-- ── Estadísticas ── -->
+  <div class="panel-externo" id="estadisticasPanel">
+    <div class="kpis" id="kpisGrid"></div>
+    <div class="stat-card">
+      <h3>Asistencia promedio por dia</h3>
+      <div id="barrasDia"></div>
+    </div>
+    <div class="stat-card">
+      <h3>Tendencia reciente (ultimas 8 reuniones)</h3>
+      <div id="tendenciaChart" style="width:100%;overflow:hidden;"></div>
+    </div>
+    <div class="stat-card">
+      <h3>Reuniones con mayor asistencia</h3>
+      <div id="rankingLista"></div>
+    </div>
+    <div class="stat-card">
+      <h3>Presencial vs Zoom</h3>
+      <div id="barrasModo"></div>
+    </div>
+  </div>
+
+</div><!-- .contenido -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ───────────────────────────────────────────────
+//  ESTADO
+// ───────────────────────────────────────────────
+let presencial = 0, zoom = 0;
+const WHATSAPP_NUM = ''; // Ej: '50245678901'
+
+// ─── Fecha de hoy (se actualiza automáticamente) ──
+function fechaLocalHoy() {
+  const ahora = new Date();
+  const y = ahora.getFullYear();
+  const m = String(ahora.getMonth() + 1).padStart(2, '0');
+  const d = String(ahora.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+function actualizarFechaSiEsHoy() {
+  const campo = document.getElementById('fecha');
+  // Solo actualizar si el campo tiene la fecha de ayer (cambio de día)
+  // o si está vacío
+  const valorActual = campo.value;
+  const hoyStr = fechaLocalHoy();
+  if (!valorActual || valorActual < hoyStr) {
+    campo.value = hoyStr;
+    actualizarPreview();
+  }
+}
+
+// Establecer fecha al cargar
+document.getElementById('fecha').value = fechaLocalHoy();
+
+// Revisar cada minuto si cambió el día
+setInterval(actualizarFechaSiEsHoy, 60000);
+
+// ─── Configuración Google Sheets (fija) ───────
+const SHEETS_URL  = 'https://script.google.com/macros/s/AKfycbwztxVgn3QICfFd7bRnK07maqIi_mFiCrUxuYsWiwt__VpSjHaKIGp7Zu_M_CP4AqW7/exec';
+const SHEETS_NOMBRE = 'Asistencia el Rio';
+
+// ─── Contadores ───────────────────────────────
+function cambiar(tipo, delta) {
+  if (tipo === 'presencial') {
+    presencial = Math.max(0, presencial + delta);
+    document.getElementById('numPresencial').textContent = presencial;
+    document.getElementById('inPresencial').value = presencial;
+  } else {
+    zoom = Math.max(0, zoom + delta);
+    document.getElementById('numZoom').textContent = zoom;
+    document.getElementById('inZoom').value = zoom;
+  }
+  actualizarTotal();
+  actualizarPreview();
+}
+
+function sincronizar(tipo) {
+  if (tipo === 'presencial') {
+    presencial = parseInt(document.getElementById('inPresencial').value) || 0;
+    document.getElementById('numPresencial').textContent = presencial;
+  } else {
+    zoom = parseInt(document.getElementById('inZoom').value) || 0;
+    document.getElementById('numZoom').textContent = zoom;
+  }
+  actualizarTotal();
+  actualizarPreview();
+}
+
+function actualizarTotal() {
+  document.getElementById('totalDisplay').textContent = presencial + zoom;
+}
+
+// ─── Mensaje ──────────────────────────────────
+function getDatosFecha() {
+  const fechaVal = document.getElementById('fecha').value || fechaLocalHoy();
+  const [y, m, d] = fechaVal.split('-').map(Number);
+  const fecha = new Date(y, m - 1, d); // Date local sin UTC
+  const diasSem = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
+  const meses   = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  return { fechaTexto: `${diasSem[fecha.getDay()]}, ${d} de ${meses[m-1]} de ${y}` };
+}
+
+function getSaludo() {
+  const hora = new Date().getHours();
+  return hora < 12 ? 'Buenos dias' : hora < 19 ? 'Buenas tardes' : 'Buenas noches';
+}
+
+// Texto plano para WhatsApp
+function generarMensaje() {
+  const { fechaTexto } = getDatosFecha();
+  const notas  = document.getElementById('notas').value.trim();
+  const total  = presencial + zoom;
+  const saludo = getSaludo();
+
+  let msg = `*${fechaTexto}*
+
+`;
+  msg += `${saludo}, queridos hermanos. Compartimos la asistencia de hoy:
+
+`;
+  msg += `Presencial:   *${presencial} personas*
+`;
+  msg += `Zoom:            *${zoom} personas*
+`;
+  msg += `─────────────────────
+`;
+  msg += `*Total:           ${total} personas*
+
+`;
+  if (notas) msg += `_${notas}_
+
+`;
+  msg += `          *Congregación El Río*
+`;
+  msg += `              *— Panajachel —*`;
+  return msg;
+}
+
+function actualizarPreview() {
+  const box = document.getElementById('previewBox');
+  const { fechaTexto } = getDatosFecha();
+  const notas  = document.getElementById('notas').value.trim();
+  const total  = presencial + zoom;
+  const saludo = getSaludo();
+
+  let html = `<div class="preview-fecha">${fechaTexto}</div>`;
+  html += `<div class="preview-saludo">${saludo}, queridos hermanos. Asistencia de hoy:</div>`;
+  html += `<div class="preview-cuerpo">`;
+  html += `<div class="preview-fila"><span class="preview-etiqueta">Presencial</span><span class="preview-valor">${presencial}</span></div>`;
+  html += `<div class="preview-fila"><span class="preview-etiqueta">Zoom</span><span class="preview-valor">${zoom}</span></div>`;
+  html += `<div class="preview-sep"></div>`;
+  html += `<div class="preview-fila total"><span class="preview-etiqueta">Total</span><span class="preview-valor">${total}</span></div>`;
+  html += `</div>`;
+  if (notas) html += `<div class="preview-nota">Nota: ${notas}</div>`;
+  html += `<div class="preview-pie">Congregacion El Rio – Panajachel</div>`;
+
+  box.innerHTML = html;
+  box.classList.add('visible');
+}
+
+// ─── WhatsApp ─────────────────────────────────
+async function enviarWhatsApp() {
+  // 1. Abrir WhatsApp
+  const msg = encodeURIComponent(generarMensaje());
+  const url = WHATSAPP_NUM
+    ? `https://wa.me/${WHATSAPP_NUM}?text=${msg}`
+    : `https://wa.me/?text=${msg}`;
+  window.open(url, '_blank');
+
+  // 2. Guardar en Sheets automáticamente
+  if (presencial === 0 && zoom === 0) {
+    toast('Agrega asistencia antes de guardar', 'warn');
+    return;
+  }
+
+  const reg = crearRegistro();
+  try {
+    const params = new URLSearchParams({
+      fecha:      reg.fecha,
+      presencial: reg.presencial,
+      zoom:       reg.zoom,
+      total:      reg.total,
+      notas:      reg.notas,
+      hoja:       SHEETS_NOMBRE
+    });
+    await fetch(`${SHEETS_URL}?${params.toString()}`, { method: 'GET', mode: 'no-cors' });
+    reg.synced = true;
+    toast('Enviado a WhatsApp y guardado en Sheets', 'ok');
+  } catch(e) {
+    reg.synced = false;
+    toast('WhatsApp enviado — error al guardar en Sheets', 'warn');
+  }
+
+  // 3. Guardar en historial local
+  const hist = obtenerHistorial();
+  hist.unshift(reg);
+  localStorage.setItem('elrio_asistencia', JSON.stringify(hist));
+  if (historialVisible) renderizarHistorial();
+
+  // 4. Resetear formulario para el siguiente registro
+  setTimeout(resetFormulario, 1200);
+}
+
+function resetFormulario() {
+  presencial = 0;
+  zoom = 0;
+  document.getElementById('numPresencial').textContent = '0';
+  document.getElementById('numZoom').textContent = '0';
+  document.getElementById('inPresencial').value = 0;
+  document.getElementById('inZoom').value = 0;
+  document.getElementById('notas').value = '';
+  document.getElementById('fecha').value = fechaLocalHoy();
+  actualizarTotal();
+  actualizarPreview();
+  toast('Listo para el siguiente registro', 'info');
+}
+
+// ─── Copiar ───────────────────────────────────
+function copiarMensaje() {
+  navigator.clipboard.writeText(generarMensaje())
+    .then(() => toast('Mensaje copiado', 'ok'))
+    .catch(() => toast('No se pudo copiar', 'warn'));
+}
+
+// ─── Guardar LOCAL ────────────────────────────
+function guardarLocal() {
+  if (presencial === 0 && zoom === 0) {
+    toast('Agrega asistencia antes de guardar', 'warn');
+    return;
+  }
+  const reg = crearRegistro();
+  reg.synced = false;
+  const hist = obtenerHistorial();
+  hist.unshift(reg);
+  localStorage.setItem('elrio_asistencia', JSON.stringify(hist));
+  toast('Guardado localmente', 'ok');
+  if (historialVisible) renderizarHistorial();
+}
+
+function crearRegistro() {
+  return {
+    id: Date.now(),
+    fecha: document.getElementById('fecha').value,
+    presencial, zoom,
+    total: presencial + zoom,
+    notas: document.getElementById('notas').value.trim(),
+    mensaje: generarMensaje(),
+    synced: false,
+    ts: new Date().toISOString()
+  };
+}
+
+// ─── Guardar en Google Sheets ─────────────────
+async function guardarEnSheets() {
+  const url = SHEETS_URL;
+
+  const btn = document.getElementById('btnSheets');
+  btn.classList.add('guardando');
+  btn.innerHTML = `<span class="spinner"></span> Guardando...`;
+  btn.disabled = true;
+
+  const reg = crearRegistro();
+
+  try {
+    const hoja = SHEETS_NOMBRE;
+    const params = new URLSearchParams({
+      fecha:      reg.fecha,
+      presencial: reg.presencial,
+      zoom:       reg.zoom,
+      total:      reg.total,
+      notas:      reg.notas,
+      hoja:       hoja
+    });
+
+    const res = await fetch(`${url}?${params.toString()}`, { method: 'GET', mode: 'no-cors' });
+
+    // Con no-cors no podemos leer la respuesta, pero si no hubo error la petición fue enviada
+    reg.synced = true;
+
+    const hist = obtenerHistorial();
+    hist.unshift(reg);
+    localStorage.setItem('elrio_asistencia', JSON.stringify(hist));
+
+    btn.classList.remove('guardando');
+    btn.classList.add('ok');
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Guardado en Sheets`;
+    toast('Registro enviado a Google Sheets', 'ok');
+
+    setTimeout(() => {
+      btn.classList.remove('ok');
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3h-15A1.5 1.5 0 003 4.5v15A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0019.5 3zm-8.25 13.5H6.75V15h4.5v1.5zm0-3H6.75V12h4.5v1.5zm0-3H6.75V9h4.5v1.5zm5.25 6h-3.75V15h3.75v1.5zm0-3h-3.75V12h3.75v1.5zm0-3h-3.75V9h3.75v1.5z"/></svg> Guardar en Google Sheets`;
+      btn.disabled = false;
+    }, 3000);
+
+  } catch (e) {
+    btn.classList.remove('guardando');
+    btn.classList.add('error');
+    btn.innerHTML = 'Error al conectar';
+    btn.disabled = false;
+    toast('Error: verifica la URL del Web App', 'warn');
+    setTimeout(() => {
+      btn.classList.remove('error');
+      btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3h-15A1.5 1.5 0 003 4.5v15A1.5 1.5 0 004.5 21h15a1.5 1.5 0 001.5-1.5v-15A1.5 1.5 0 0019.5 3zm-8.25 13.5H6.75V15h4.5v1.5zm0-3H6.75V12h4.5v1.5zm0-3H6.75V9h4.5v1.5zm5.25 6h-3.75V15h3.75v1.5zm0-3h-3.75V12h3.75v1.5zm0-3h-3.75V9h3.75v1.5z"/></svg> Guardar en Google Sheets`;
+    }, 3000);
+
+    // Guardar igualmente de forma local
+    reg.synced = false;
+    const hist = obtenerHistorial();
+    hist.unshift(reg);
+    localStorage.setItem('elrio_asistencia', JSON.stringify(hist));
+  }
+
+  if (historialVisible) renderizarHistorial();
+}
+
+// ─── Re-sincronizar un registro desde historial ─
+async function sincronizarRegistro(id) {
+  const url = SHEETS_URL;
+
+  const hist = obtenerHistorial();
+  const reg  = hist.find(r => r.id === id);
+  if (!reg) return;
+
+  toast('Enviando a Sheets...', 'info');
+  try {
+    const hoja = SHEETS_NOMBRE;
+    const params = new URLSearchParams({
+      fecha: reg.fecha, presencial: reg.presencial,
+      zoom: reg.zoom, total: reg.total, notas: reg.notas || '', hoja
+    });
+    await fetch(`${url}?${params.toString()}`, { method: 'GET', mode: 'no-cors' });
+    reg.synced = true;
+    localStorage.setItem('elrio_asistencia', JSON.stringify(hist));
+    toast('Sincronizado con Sheets', 'ok');
+    renderizarHistorial();
+  } catch(e) {
+    toast('Error al sincronizar', 'warn');
+  }
+}
+
+// ─── Historial ────────────────────────────────
+function obtenerHistorial() {
+  return JSON.parse(localStorage.getItem('elrio_asistencia') || '[]');
+}
+
+let historialVisible = false;
+function toggleHistorial() {
+  historialVisible = !historialVisible;
+  document.getElementById('historialPanel').classList.toggle('visible', historialVisible);
+  if (historialVisible) renderizarHistorial();
+}
+
+function renderizarHistorial() {
+  const lista = document.getElementById('historialLista');
+  const datos = obtenerHistorial();
+  if (!datos.length) {
+    lista.innerHTML = '<p style="color:rgba(255,255,255,0.5);font-size:0.86rem;text-align:center;padding:20px;">Aun no hay registros guardados.</p>';
+    return;
+  }
+  const meses = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  lista.innerHTML = datos.map(r => {
+    const [y,m,d] = r.fecha.split('-').map(Number);
+    const fStr = `${d} ${meses[m-1]} ${y}`;
+    const estadoHtml = r.synced
+      ? `<div class="hist-estado synced">Sincronizado con Google Sheets</div>`
+      : `<div class="hist-estado local">Solo guardado localmente</div>`;
+    return `
+      <div class="hist-item">
+        <div class="hist-fecha">${fStr}</div>
+        <div class="hist-datos">
+          <span class="hist-chip presencial">${r.presencial} presencial</span>
+          ${r.zoom > 0 ? `<span class="hist-chip zoom">${r.zoom} Zoom</span>` : ''}
+          <span class="hist-chip total">${r.total} total</span>
+        </div>
+        ${r.notas ? `<div style="font-size:0.76rem;opacity:0.6;margin-top:5px;">${r.notas}</div>` : ''}
+        ${estadoHtml}
+        <div class="hist-actions">
+          <button class="hist-btn" onclick="reenviarWhatsApp(${r.id})">WhatsApp</button>
+          ${!r.synced ? `<button class="hist-btn sheets" onclick="sincronizarRegistro(${r.id})">Enviar a Sheets</button>` : ''}
+          <button class="hist-btn" onclick="eliminarRegistro(${r.id})" style="background:rgba(192,57,43,0.25);border-color:rgba(192,57,43,0.3);">Eliminar</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function reenviarWhatsApp(id) {
+  const r = obtenerHistorial().find(x => x.id === id);
+  if (!r) return;
+  const msg = encodeURIComponent(r.mensaje);
+  const url = WHATSAPP_NUM ? `https://wa.me/${WHATSAPP_NUM}?text=${msg}` : `https://wa.me/?text=${msg}`;
+  window.open(url, '_blank');
+}
+
+function eliminarRegistro(id) {
+  if (!confirm('¿Eliminar este registro del historial local?')) return;
+  const hist = obtenerHistorial().filter(r => r.id !== id);
+  localStorage.setItem('elrio_asistencia', JSON.stringify(hist));
+  renderizarHistorial();
+  if (estadisticasVisible) renderizarEstadisticas();
+}
+
+// ─── Exportar CSV ─────────────────────────────
+function exportarCSV() {
+  const datos = obtenerHistorial();
+  if (!datos.length) { toast('No hay datos para exportar', 'warn'); return; }
+  const cab  = 'Fecha,Presencial,Zoom,Total,Notas,Sincronizado\n';
+  const rows = datos.map(r =>
+    `${r.fecha},${r.presencial},${r.zoom},${r.total},"${r.notas || ''}",${r.synced ? 'Si' : 'No'}`
+  ).join('\n');
+  const blob = new Blob([cab + rows], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'asistencia_el_rio.csv';
+  a.click();
+  toast('CSV exportado', 'ok');
+}
+
+// ─── Estadísticas ─────────────────────────────
+let estadisticasVisible = false;
+function toggleEstadisticas() {
+  estadisticasVisible = !estadisticasVisible;
+  document.getElementById('estadisticasPanel').classList.toggle('visible', estadisticasVisible);
+  if (estadisticasVisible) renderizarEstadisticas();
+}
+
+function renderizarEstadisticas() {
+  const datos = obtenerHistorial();
+  if (!datos.length) {
+    document.getElementById('kpisGrid').innerHTML =
+      '<p style="color:rgba(255,255,255,0.5);font-size:0.86rem;text-align:center;padding:16px;grid-column:1/-1;">Aun no hay registros para mostrar estadisticas.</p>';
+    return;
+  }
+
+  const totales  = datos.map(r => r.total);
+  const max      = Math.max(...totales);
+  const min      = Math.min(...totales);
+  const prom     = Math.round(totales.reduce((a,b)=>a+b,0) / totales.length);
+
+  document.getElementById('kpisGrid').innerHTML = `
+    <div class="kpi"><div class="kpi-val">${datos.length}</div><div class="kpi-lbl">Reuniones</div></div>
+    <div class="kpi"><div class="kpi-val">${prom}</div><div class="kpi-lbl">Promedio</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#fde68a">${max}</div><div class="kpi-lbl">Maxima</div></div>
+    <div class="kpi"><div class="kpi-val" style="color:#93c5fd">${min}</div><div class="kpi-lbl">Minima</div></div>
+  `;
+
+  // Barras por día
+  const diasNom = ['Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado'];
+  const porDia  = Array(7).fill(null).map(() => []);
+  datos.forEach(r => {
+    const [y,m,d] = r.fecha.split('-').map(Number);
+    porDia[new Date(y, m-1, d).getDay()].push(r.total);
+  });
+  const colores = ['#f59e0b','#3b82f6','#10b981','#8b5cf6','#ef4444','#f97316','#06b6d4'];
+  const promediosDia = porDia.map(arr => arr.length ? Math.round(arr.reduce((a,b)=>a+b,0)/arr.length) : 0);
+  const maxDia = Math.max(...promediosDia, 1);
+  const diasConDatos = diasNom
+    .map((n,i) => ({ nombre: n, prom: promediosDia[i], color: colores[i], count: porDia[i].length }))
+    .filter(d => d.count > 0).sort((a,b) => b.prom - a.prom);
+  document.getElementById('barrasDia').innerHTML = diasConDatos.map(d => `
+    <div class="barra-wrap">
+      <div class="barra-label"><span>${d.nombre} <span style="opacity:0.5">(${d.count})</span></span><span>${d.prom}</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:${Math.round(d.prom/maxDia*100)}%;background:${d.color};">${d.prom}</div></div>
+    </div>`).join('');
+
+  // Tendencia SVG
+  const ult = [...datos].reverse().slice(-8);
+  if (ult.length >= 2) {
+    const meses2 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+    const maxT  = Math.max(...ult.map(r=>r.total), 1);
+    const minT  = Math.min(...ult.map(r=>r.total));
+    const W = 400, H = 70, pad = 22;
+    const xStep = (W - pad*2) / (ult.length - 1);
+    const pts = ult.map((r,i) => ({
+      x: pad + i * xStep,
+      y: H - pad - ((r.total - minT) / (maxT - minT || 1)) * (H - pad*2),
+      r
+    }));
+    const polyline = pts.map(p=>`${p.x},${p.y}`).join(' ');
+    const areaPath = `M${pts[0].x},${H-pad} ` + pts.map(p=>`L${p.x},${p.y}`).join(' ') + ` L${pts[pts.length-1].x},${H-pad} Z`;
+    document.getElementById('tendenciaChart').innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" width="100%" style="overflow:visible">
+        <defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#60a5fa" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="0"/>
+        </linearGradient></defs>
+        <path d="${areaPath}" fill="url(#tg)"/>
+        <polyline points="${polyline}" fill="none" stroke="#60a5fa" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${pts.map((p,i) => `
+          <circle cx="${p.x}" cy="${p.y}" r="4" fill="#60a5fa"/>
+          <text x="${p.x}" y="${H-4}" text-anchor="middle" font-size="9" fill="rgba(255,255,255,0.45)">${p.r.fecha.split('-')[2]} ${meses2[parseInt(p.r.fecha.split('-')[1])-1]}</text>
+          <text x="${p.x}" y="${p.y-9}" text-anchor="middle" font-size="10" font-weight="700" fill="#fde68a">${p.r.total}</text>
+        `).join('')}
+      </svg>`;
+  }
+
+  // Ranking
+  const mesNom2 = ['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  const diasN2  = ['Dom','Lun','Mar','Mie','Jue','Vie','Sab'];
+  const topD = [...datos].sort((a,b)=>b.total-a.total).slice(0,5);
+  document.getElementById('rankingLista').innerHTML = topD.map((r,i) => {
+    const [y,m,d] = r.fecha.split('-').map(Number);
+    const dia = diasN2[new Date(y,m-1,d).getDay()];
+    const cls = ['rank-1','rank-2','rank-3','rank-other','rank-other'][i];
+    const med = i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : `${i+1}`;
+    return `<div class="ranking-item">
+      <div class="ranking-num ${cls}">${med}</div>
+      <div class="ranking-info">
+        <div class="ranking-fecha">${dia} ${d} de ${mesNom2[m-1]} ${y}</div>
+        <div class="ranking-detalle">${r.presencial} presencial${r.zoom > 0 ? ' · '+r.zoom+' Zoom' : ''}</div>
+      </div>
+      <div class="ranking-total">${r.total}</div>
+    </div>`;
+  }).join('');
+
+  // Presencial vs Zoom
+  const tP = datos.reduce((a,r)=>a+r.presencial,0);
+  const tZ = datos.reduce((a,r)=>a+r.zoom,0);
+  const gT = tP + tZ || 1;
+  const pP = Math.round(tP/gT*100);
+  const pZ = 100 - pP;
+  document.getElementById('barrasModo').innerHTML = `
+    <div class="barra-wrap">
+      <div class="barra-label"><span>Presencial</span><span>${tP} personas · ${pP}%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:${pP}%;background:#3b82f6;">${pP}%</div></div>
+    </div>
+    <div class="barra-wrap" style="margin-top:8px;">
+      <div class="barra-label"><span>Zoom</span><span>${tZ} personas · ${pZ}%</span></div>
+      <div class="barra-track"><div class="barra-fill" style="width:${Math.max(pZ,2)}%;background:#10b981;">${pZ}%</div></div>
+    </div>
+    <p style="font-size:0.72rem;opacity:0.5;margin-top:10px;text-align:center;">Acumulado de ${datos.length} reunion${datos.length !== 1 ? 'es' : ''}</p>
+  `;
+}
+
+// ─── Toast ────────────────────────────────────
+function toast(msg, tipo = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${tipo} show`;
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Init preview
+actualizarPreview();
+</script>
+
+<!--
+============================================================
+  CODIGO PARA GOOGLE APPS SCRIPT
+  
+  Instrucciones:
+  1. Ve a https://script.google.com
+  2. Crea un nuevo proyecto
+  3. Borra el contenido del editor y pega TODO el codigo de abajo
+  4. Guarda (Ctrl+S)
+  5. Haz clic en "Implementar" > "Nueva implementacion"
+  6. Tipo: "Aplicacion web"
+  7. Ejecutar como: "Yo"
+  8. Acceso: "Cualquier persona"
+  9. Haz clic en "Implementar" y autoriza los permisos
+  10. Copia la URL y pegala en "Configurar Google Sheets" arriba
+
+============================================================
+
+function doGet(e) {
+  try {
+    var ss    = SpreadsheetApp.getActiveSpreadsheet();
+    var hoja  = e.parameter.hoja || 'Asistencia';
+    var sheet = ss.getSheetByName(hoja);
+
+    if (!sheet) {
+      sheet = ss.insertSheet(hoja);
+      // Crear encabezados
+      sheet.appendRow(['Fecha', 'Presencial', 'Zoom', 'Total', 'Notas', 'Registrado el']);
+      var header = sheet.getRange(1, 1, 1, 6);
+      header.setFontWeight('bold');
+      header.setBackground('#1a5f8a');
+      header.setFontColor('#ffffff');
+    }
+
+    sheet.appendRow([
+      e.parameter.fecha      || '',
+      parseInt(e.parameter.presencial) || 0,
+      parseInt(e.parameter.zoom)       || 0,
+      parseInt(e.parameter.total)      || 0,
+      e.parameter.notas      || '',
+      new Date().toLocaleString('es-GT')
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: true }))
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({ ok: false, error: err.message }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+============================================================
+-->
+</body>
+</html>
